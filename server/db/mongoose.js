@@ -4,7 +4,7 @@ const keys = require("./keys/keys");
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/TodoApp");
+mongoose.connect("mongodb://test:test@ds237770.mlab.com:37770/todo-app");
 
 module.exports = {
   mongoose
