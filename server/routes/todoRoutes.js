@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const express = require("express");
 const mongoose = require("mongoose");
 const { ObjectID } = require("mongodb");
@@ -52,6 +53,37 @@ module.exports = app => {
       })
       .catch(err => {
         res.status(400).send(err);
+      });
+  });
+
+  // Path - updated todo items
+  app.patch("/todos/:id", (req, res) => {
+    let id = req.params.id;
+    // the array is the properties u want to pull off if they exist, text and completed
+    let body = _.pick(req.body, ["text", "completed"]);
+
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    }
+
+    if (_.isBoolean(body.completed) && body.completed) {
+      body.completedAt = new Date().getTime();
+    } else {
+      body.completed = false;
+      body.completedAt = null;
+    }
+
+    // return the newly updated todo
+    Todo.findByIdAndUpdate(id, { $set: body }, { new: true })
+      .then(todo => {
+        if (!todo) {
+          return res.status(404).send();
+        }
+
+        res.send({ todo });
+      })
+      .catch(e => {
+        res.status(400).send();
       });
   });
 
