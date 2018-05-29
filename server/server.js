@@ -18,6 +18,7 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
+// Api routes
 require("./routes/todoRoutes")(app);
 
 let port = process.env.PORT || 3000;
@@ -25,3 +26,8 @@ let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 });
+
+// For testing purposes
+module.exports = {
+  app
+};
