@@ -1,4 +1,1 @@
 node_modules/
-server/db/config/keys_prod.js
-server/db/config/keys_dev.js
-server/db/config/keys_test.js
