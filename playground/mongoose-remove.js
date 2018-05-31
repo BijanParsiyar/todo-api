@@ -13,6 +13,19 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
-Todo.remove({}).then(result => {
-  console.log(result);
+// We do not get the doc back only tells us how many was removed
+// Todo.remove({}).then(result => {
+//   console.log(result);
+// });
+
+// Sends the doc back to us
+Todo.findOneAndRemove({ _id: "5b0d7c5d6617cb6d8bb0ab9c" }).then(todo => {
+  console.log(todo);
 });
+
+// Todo.findByIdAndRemove()
+
+// Todo.findByIdAndRemove('5b0d7c5d6617cb6d8bb0ab9c')
+//   .then(todo => {
+//     console.log(todo);
+//   })

@@ -19,6 +19,7 @@ mongoose
 
 // Api routes
 require("./routes/todoRoutes")(app);
+require("./routes/userRoutes")(app);
 
 let port = process.env.PORT || 3000;
 
