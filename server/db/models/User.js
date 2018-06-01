@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
+const bcrypt = require("bcryptjs");
 
 const validator = require("validator");
 
@@ -83,5 +84,21 @@ UserSchema.statics.findByToken = function(token) {
     "tokens.access": "auth"
   });
 };
+
+// Mongoose middleware
+UserSchema.pre("save", function(next) {
+  let user = this;
+
+  if (user.isModified("password")) {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash) => {
+        user.password = hash;
+        next(); // gets send to next mongoose middleware, if there is no middlware left it will get saved to // the mongo database
+      });
+    });
+  } else {
+    next();
+  }
+});
 
 module.exports = User = mongoose.model("user", UserSchema);
