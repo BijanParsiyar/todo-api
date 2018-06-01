@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 
 const User = require("../db/models/User");
+const { authenticate } = require("../middleware/authenticate");
 
 module.exports = app => {
   // Post - new user
@@ -20,5 +21,10 @@ module.exports = app => {
         res.header("x-auth", token).send(user);
       })
       .catch(e => res.status(400).send(e));
+  });
+
+  // Verify x-auth token and send user back
+  app.get("/users/me", authenticate, (req, res) => {
+    res.send(req.user);
   });
 };
