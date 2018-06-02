@@ -9,9 +9,10 @@ let authenticate = (req, res, next) => {
         return Promise.reject(); // will go to the catch block
       }
 
+      // attach to user to request object
       req.user = user;
       req.token = token;
-      next();
+      next(); // go to next middleware
     })
     .catch(e => {
       res.status(401).send();
