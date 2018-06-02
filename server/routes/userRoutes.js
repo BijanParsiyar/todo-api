@@ -6,7 +6,7 @@ const User = require("../db/models/User");
 const { authenticate } = require("../middleware/authenticate");
 
 module.exports = app => {
-  // Post - new user
+  // Post - new user - signing up
   app.post("/users", (req, res) => {
     let body = _.pick(req.body, ["email", "password"]);
 
@@ -21,6 +21,21 @@ module.exports = app => {
         res.header("x-auth", token).send(user);
       })
       .catch(e => res.status(400).send(e));
+  });
+
+  // Post - logging in
+  app.post("/users/login", (req, res) => {
+    let body = _.pick(req.body, ["email", "password"]);
+
+    User.findByCredentials(body.email, body.password)
+      .then(user => {
+        return user.generateAuthToken().then(token => {
+          res.header("x-auth", token).send(user);
+        });
+      })
+      .catch(e => {
+        res.status(400).send();
+      });
   });
 
   // Verify x-auth token and send user back
