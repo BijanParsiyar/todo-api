@@ -272,7 +272,7 @@ describe("POST /users", () => {
       .expect(res => {
         expect(res.header["x-auth"]).toBeTruthy();
         expect(res.body._id).toBeTruthy();
-        expect(res.body.email).toBeTruthy();
+        expect(res.body.email).toBe(email);
       })
       .end(err => {
         if (err) {
@@ -281,7 +281,8 @@ describe("POST /users", () => {
 
         User.findOne({ email })
           .then(user => {
-            expect(user).toBe(user);
+            expect(user).toBeTruthy();
+            // expect(user.password).not.toBe(password);
             done();
           })
           .catch(e => done(e));
@@ -330,7 +331,9 @@ describe("POST /users/login", () => {
 
         User.findById(users[1]._id)
           .then(user => {
-            // expect(user.tokens[1]).toInclude({
+            // returns raw user data w/o inner
+            // workings of mongoose, the data we see in the MongoDB exactly
+            // expect(user.toObject().tokens[1]).toMatchObject({
             //   access: "auth",
             //   token: res.headers["x-auth"]
             // });

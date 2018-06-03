@@ -46,6 +46,7 @@ const UserSchema = new Schema({
 UserSchema.methods.toJSON = function() {
   let user = this;
   let userObject = user.toObject(); // turns mongoose model into a regular object with the properties
+  // basically removes all the methods associated to it
 
   return _.pick(userObject, ["_id", "email"]); // get the id and email from the user instance object and
   // send that to the user
@@ -121,7 +122,7 @@ UserSchema.statics.findByCredentials = function(email, password) {
   });
 };
 
-// Mongoose middleware
+// Mongoose middleware - generates hashed password
 UserSchema.pre("save", function(next) {
   let user = this;
 

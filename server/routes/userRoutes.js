@@ -5,8 +5,6 @@ const _ = require("lodash");
 const User = require("../db/models/User");
 const { authenticate } = require("../middleware/authenticate");
 
-const secret = require("../db/config/keys").JWT_SECRET;
-
 module.exports = app => {
   // Post - new user - signing up
   app.post("/users", (req, res) => {
