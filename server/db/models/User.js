@@ -6,6 +6,8 @@ const bcrypt = require("bcryptjs");
 
 const validator = require("validator");
 
+const secret = require("../config/keys").JWT_SECRET;
+
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -54,7 +56,7 @@ UserSchema.methods.generateAuthToken = function() {
   let user = this;
   let access = "auth";
   let token = jwt
-    .sign({ _id: user._id.toHexString(), access }, "abc123")
+    .sign({ _id: user._id.toHexString(), access }, secret)
     .toString();
 
   user.tokens = user.tokens.concat({
@@ -86,7 +88,7 @@ UserSchema.statics.findByToken = function(token) {
   let decoded;
 
   try {
-    decoded = jwt.verify(token, "abc123");
+    decoded = jwt.verify(token, secret);
   } catch (e) {
     return Promise.reject(); // Same thing as instantiating a promise and rejecting it
   }
